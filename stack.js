@@ -8,7 +8,7 @@
  extraright=10;
  var saw=308;
  var sah=247; 
- var stdir;
+ var stdir; // 移动速度，跟它是越到后面速度越快，公式是是根数的log值
  var stwidth=new Array();
  var stmargin=new Array();
  var sttype=new Array();
@@ -20,15 +20,15 @@
  stmargin[0]=(saw-stwidth[0])/2; //ronk margoja!
  sttype[0]=Math.floor(Math.random()*4)+1;
  var stinterval;
- var paddingtarget=0,paddingnow=0;
+ var paddingtarget=0;
+ var paddingnow=0;
  var gameisover=1;
  var dnd=0;
 
- function firstinit() {
-  document.body.addEventListener("touchmove", function(e) {
-          e.preventDefault();
-  }, false);
 
+
+// 第一次初始化
+ function firstinit() {
   gamesplayed=getCookie('stack_gamesplayed');
   if(gamesplayed == '') {gamesplayed=0;}
   document.getElementById('gamesplayed').innerHTML=gamesplayed;
@@ -43,7 +43,9 @@
   }, false);
  }
 
+// 游戏初始化
  function init() {
+  // 点击按钮
   tmp=document.createElement('div');
   tmp.style.position='absolute';
   tmp.style.cursor='pointer';
@@ -63,17 +65,21 @@
   tmp.style.margin='243px 0 0 0';
   $('st_outerarea').appendChild(tmp);
 
+
+  // 设置背景图
   tmp=document.createElement('div')
   tmp.id='st_scrollarea';
   tmp.style.backgroundImage='url(i/bg1250.png)';
-  tmp.style.backgroundPosition='bottom center';
+  tmp.style.backgroundPosition='center center';
   tmp.style.width='320px';
   tmp.style.height='315px';
   tmp.style.position='absolute';
   $('st_outerarea').appendChild(tmp);
 
-  tmp2=Math.floor(Math.random()*4)+1;
+  //tmp2=Math.floor(Math.random()*4)+1;
 
+ 
+  // 第一个木棍
   tmp=document.createElement('div');
   tmp.id='stp_0';
   tmp.style.position='absolute';
@@ -82,7 +88,6 @@
   tmp.style.marginLeft=stmargin[0]-extraleft[sttype[0]]+7+'px';
   $('st_scrollarea').appendChild(tmp);
   showaronk('stp_0',sttype[0],ststart[0],stwidth[0]);
-  //addshadow();
   updateStack();
  }
 
@@ -132,10 +137,10 @@ function stack_dothemove() {
   }
   stmargin[sts]+=stdir;
   if(stmargin[sts] < 0) {
-      stmargin[sts]=-stmargin[sts]; 
+     // stmargin[sts]=-stmargin[sts]; 
       stdir*=-1;
     } else if(stmargin[sts]+stwidth[sts] > saw) {
-      stmargin[sts]=saw-stwidth[sts]-stmargin[sts]-stwidth[sts]+ saw; 
+      //stmargin[sts]=saw-stwidth[sts]-stmargin[sts]-stwidth[sts]+ saw; 
       stdir*=-1;
     }
   document.getElementById('stp_'+sts).style.marginLeft=stmargin[sts]-extraleft[sttype[sts]]+7+'px';
@@ -222,7 +227,7 @@ function cutaronk(crid,crtype,crstart,crstays,crfrom) {
   document.getElementById(crid).getElementsByTagName('div')[0].getElementsByTagName('div')[0].style.backgroundPosition=crstart+crstays-croriw+'px';
   document.getElementById(crid).getElementsByTagName('div')[0].getElementsByTagName('img')[1].style.marginLeft=croriw-crstays+'px';
   showaronk(crid,crtype,crstart,croriw-crstays);
-  document.getElementById(crid).childNodes[1].style.zIndex=(sts % 2 == 1)?(14):(16);
+  document.getElementById(crid).childNodes[1].style.zIndex=12;
  }
 
  if(crfrom !='') {
@@ -250,6 +255,12 @@ function cutaronk(crid,crtype,crstart,crstays,crfrom) {
  }
 }
 
+
+//srid : 每一个木头的ID
+//srtype : 木头的类型
+//srstart : 木头的其实位置
+//srsize : 规则的长度
+//构造一个木棍和准备两个被切割的两个端口
 function showaronk(srid,srtype,srstart,srsize) {
  srt='i/'+srtype
  tmp=document.createElement('div');
@@ -264,7 +275,7 @@ function showaronk(srid,srtype,srstart,srsize) {
  tmp2.style.height=logh+'px';
  tmp2.style.marginLeft=extraleft[srtype]+'px';
  tmp2.style.backgroundImage='url('+srt+'2.png)';
- tmp2.style.backgroundPosition=srstart+'px 0';
+ tmp2.style.backgroundPosition=srstart+'px 0px';
  tmp.appendChild(tmp2);
 
  tmp2=document.createElement('img');
